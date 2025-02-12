@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortear Grupos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <style>
+         :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #818cf8;
+            --accent-color: #6366f1;
+            --background-light: #f8fafc;
+            --background-dark: #1e293b;
+            --text-light: #f1f5f9;
+            --text-dark: #334155;
+        }
+
+        body {
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(to right, #007bff, #00c6ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        transition: background 0.5s ease-in-out;
+        overflow: hidden; /* Evita el desplazamiento de la página completa */
+    }
+    .scrollable-container {
+        max-height: 100vh;
+        overflow-y: auto;
+        width: 100%;
+    }
+    .container {
+        max-width: 600px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .result {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode {
+            background: var(--background-dark);
+            color: var(--text-light);
+        }
+
+        .dark-mode .app-container {
+            background: rgba(30, 41, 59, 0.95);
+            color: var(--text-light);
+        }
+
+        .dark-mode .form-control {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: var(--text-light);
+        }
+
+        .match {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .match:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        textarea {
+            width: 100%;
+            height: 200px!important; /* Cambiar la altura a 150px */
+            resize: none;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #007bff, #00c6ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background 0.5s ease-in-out;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            resize: none;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: left;
+            display: none;
+            background: #eef;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+        .btn-secondary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #0056b3;
+        }
+        .btn-dark-mode {
+            background-color: #343a40;
+            color: white;
+        }
+        .btn-dark-mode:hover {
+            background-color: #23272b;
+        }
+        .btn-copy {
+            background-color: #ffc107;
+            color: black;
+        }
+        .btn-copy:hover {
+            background-color: #e0a800;
+        }
+        .dark-mode {
+            background: #222 !important;
+            color: white !important;
+        }
+        .dark-mode .container {
+            background: #333 !important;
+            color: white !important;
+        }
+        .dark-mode .btn {
+            border: none;
+        }
+        .dark-mode .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+        .dark-mode .btn-secondary {
+            background-color: #007bff;
+            color: white;
+        }
+        .dark-mode .btn-dark-mode {
+            background-color: #343a40;
+            color: white;
+        }
+        .dark-mode .btn-copy {
+            background-color: #ffc107;
+            color: black;
+        }
+        .bracket {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .round {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .match {
+            background: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            width: 150px;
+        }
+        .dark-mode .modal{
+            background: #333 !important;
+            color: white !important;
+        }
+        .dark-mode .modal-dialog{
+            background: #333 !important;
+            color: white !important;
+        }
+    </style>
+     <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #818cf8;
+            --accent-color: #6366f1;
+            --background-light: #f8fafc;
+            --background-dark: #1e293b;
+            --text-light: #f1f5f9;
+            --text-dark: #334155;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-light);
+            margin: 0;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            color: var(--text-dark);
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        /* Dark Mode Styles */
+        .dark-mode {
+            background: var(--background-dark);
+            color: var(--text-light);
+        }
+
+        .dark-mode .container {
+            background: #2d3748;
+            color: var(--text-light);
+        }
+
+        .dark-mode .form-control {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: var(--text-light);
+        }
+
+        .dark-mode .form-control:focus {
+            background: #2d3748;
+            color: var (--text-light);
+        }
+
+        .dark-mode .modal-content {
+            background: #2d3748;
+            color: var(--text-light);
+        }
+
+        .dark-mode .modal-header {
+            border-bottom-color: #4a5568;
+        }
+
+        .dark-mode .modal-footer {
+            border-top-color: #4a5568;
+        }
+
+        .dark-mode .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
+        .dark-mode .result {
+            background: #2d3748;
+            color: var(--text-light);
+        }
+
+        .dark-mode .match {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: var(--text-light);
+        }
+
+        /* Football Field Styles */
+        .football-field {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-image: url('https://www.elclasicofutbol5.com/wp-content/uploads/2015/06/cancha-dimensiones-futbol.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .team-column {
+            width: 45%;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .dark-mode .team-column {
+            background: rgba(45, 55, 72, 0.9);
+        }
+
+        .captain-badge {
+            margin-left: 5px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* Additional Styles */
+        .group-name-input {
+            background: transparent !important;
+            color: inherit !important;
+        }
+
+        .dark-mode .group-name-input {
+            border-color: #4a5568;
+        }
+        .match-simulation {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .match-simulation {
+        background: rgba(45, 55, 72, 0.9);
+        color: var(--text-light);
+    }
+
+    .score-display {
+        font-size: 2em;
+        font-weight: bold;
+        margin: 20px 0;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .goal-detail {
+        margin: 5px 0;
+        padding: 5px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+
+    .dark-mode .goal-detail {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .simulation-btn {
+        margin-top: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .simulation-btn:hover {
+        background-color: #45a049;
+    }
+
+    .highlight {
+        color: #ffd700;
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <div class="position-absolute top-0 end-0 p-3">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="darkModeSwitch" onclick="toggleDarkMode()">
+            <label class="form-check-label" for="darkModeSwitch">
+                <span id="darkModeIcon" class="bi bi-sun-fill"></span>
+            </label>
+        </div>
+    </div>
+    <div class="scrollable-container">
+        <div class="container">
+            <h2 class="mb-3">Sortear Grupos</h2>
+            <p>Ingresa los nombres y selecciona la cantidad de grupos. Luego, haz clic en "Generar Grupos" para distribuirlos aleatoriamente.</p>
+            <textarea id="names" class="form-control mb-2" placeholder="Ingresa los nombres, uno por línea..."></textarea>
+            <p id="playerCount">Cantidad de personas anotadas: 0</p>
+            <label for="groupCount" class="form-label">Cantidad de grupos:</label>
+            <input type="number" id="groupCount" class="form-control mb-2" min="1" value="2">
+            <button class="btn btn-secondary" onclick="selectCaptains()">Seleccionar Capitanes</button>
+            <button class="btn btn-primary" onclick="generateGroups()">Generar Grupos</button>
+            <button class="btn btn-secondary" onclick="generateFootballFormation()">Modo Fútbol</button>
+            <button class="btn btn-copy" onclick="copyResults()">Copiar Resultados</button>
+            <button class="btn btn-primary" id="generateTournamentBtn" onclick="generateTournament()" disabled>Generar Torneo</button>
+            <button class="btn btn-secondary" onclick="openFeedbackModal()">Enviar Opinión</button>
+            <div id="output" class="result"></div>
+            <div id="tournament" class="result"></div>
+        </div>
+    </div>
+    <!-- Modal para enviar opinión -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="feedbackModalLabel">Enviar Opinión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="feedbackText" class="form-control" rows="4" placeholder="Escribe tu opinión aquí..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="sendFeedback()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        emailjs.init("Hg8IIIbhx3Y9W-g7IDW_4"); // Reemplaza "YOUR_USER_ID" con tu user_id de EmailJS
+
+        let isDarkMode = false;
+        let selectedCaptains = [];
+        let groups = [];
+        let currentRound = 1;
+        let matches = [];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function selectCaptains() {
+            let names = document.getElementById("names").value.split("\n").map(name => name.trim()).filter(name => name !== "");
+            let groupCount = parseInt(document.getElementById("groupCount").value);
+            if (names.length === 0) {
+                Swal.fire("Error", "Ingresa nombres antes de seleccionar capitanes.", "error");
+                return;
+            }
+            let options = names.map(name => `<input type='checkbox' class='captain-checkbox' value='${name}'> ${name}<br>`).join('');
+            Swal.fire({
+                title: "Selecciona los capitanes",
+                html: options,
+                showCancelButton: true,
+                confirmButtonText: "Confirmar",
+                preConfirm: () => {
+                    selectedCaptains = Array.from(document.querySelectorAll('.captain-checkbox:checked')).map(cb => cb.value);
+                    if (selectedCaptains.length > groupCount) {
+                        Swal.fire("Error", "No puedes seleccionar más capitanes que grupos.", "error");
+                        selectedCaptains = [];
+                    }
+                }
+            });
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            document.getElementById('darkModeIcon').className = isDarkMode ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+        }
+
+        function generateGroups() {
+        let names = document.getElementById("names").value.split("\n").map(name => name.trim()).filter(name => name !== "");
+        let groupCount = parseInt(document.getElementById("groupCount").value);
+        let outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = "";
+        outputDiv.style.display = "block";
+
+        if (names.length < groupCount) {
+            Swal.fire("Error", "No hay suficientes nombres para los grupos seleccionados.", "error");
+            return;
+        }
+
+        shuffleArray(names);
+        groups = Array.from({ length: groupCount }, () => []);
+
+        // Asignar capitanes primero
+        for (let i = 0; i < groupCount; i++) {
+            const captain = names.shift();
+            groups[i].push(`${captain} (C)`);
+        }
+
+        // Distribuir el resto de jugadores
+        names.forEach((name, index) => {
+            groups[index % groupCount].push(name);
+        });
+
+        groups.forEach((group, index) => {
+            outputDiv.innerHTML += `
+                <div class="group-container mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <input type="text" 
+                               class="form-control group-name-input" 
+                               value="Grupo ${index + 1}" 
+                               id="group-name-${index}"
+                               style="max-width: 200px; font-weight: bold;">
+                        <button class="btn btn-outline-primary btn-sm ms-2" 
+                                onclick="saveGroupName(${index})">
+                            Guardar nombre
+                        </button>
+                    </div>
+                    ${group.map((name, i) => `
+                        <input type="text" 
+                               class="form-control mb-2" 
+                               value="${name}" 
+                               id="group-${index}-${i}" 
+                               readonly>
+                    `).join("")}
+                </div>`;
+        });
+
+        document.getElementById("generateTournamentBtn").disabled = false;
+    }
+    function generateFootballFormation() {
+    let groupCount = parseInt(document.getElementById("groupCount").value);
+    if (groupCount !== 2) {
+        Swal.fire("Error", "El modo fútbol solo está disponible para 2 equipos.", "error");
+        return;
+    }
+
+    let names = document.getElementById("names").value.split("\n").map(name => name.trim()).filter(name => name !== "");
+    if (names.length < 2) {
+        Swal.fire("Error", "Se necesitan al menos 2 jugadores para generar equipos.", "error");
+        return;
+    }
+
+    shuffleArray(names);
+    window.team1 = []; // Hacemos los equipos globales
+    window.team2 = [];
+    window.team1Name = "Equipo Local";
+    window.team2Name = "Equipo Visitante";
+    
+    // Asignar capitanes
+    window.team1.push(`${names[0]} (C)`);
+    window.team2.push(`${names[1]} (C)`);
+    
+    // Distribuir resto de jugadores
+    for (let i = 2; i < names.length; i++) {
+        if (i % 2 === 0) {
+            window.team1.push(names[i]);
+        } else {
+            window.team2.push(names[i]);
+        }
+    }
+
+    let outputDiv = document.getElementById("output");
+    outputDiv.innerHTML = `
+        <div class="football-field">
+            <div class="team-column">
+                <div class="d-flex align-items-center mb-2">
+                    <input type="text" 
+                           class="form-control group-name-input" 
+                           value="${window.team1Name}" 
+                           id="team-name-0"
+                           style="max-width: 200px; font-weight: bold;">
+                    <button class="btn btn-outline-primary btn-sm ms-2 p-1" 
+                            onclick="saveTeamName(0)">
+                        <i class="bi bi-check-lg"></i>
+                    </button>
+                </div>
+                ${window.team1.map(name => `<div class="mb-2">${name}</div>`).join('')}
+            </div>
+            <div class="team-column">
+                <div class="d-flex align-items-center mb-2">
+                    <input type="text" 
+                           class="form-control group-name-input" 
+                           value="${window.team2Name}" 
+                           id="team-name-1"
+                           style="max-width: 200px; font-weight: bold;">
+                    <button class="btn btn-outline-primary btn-sm ms-2 p-1" 
+                            onclick="saveTeamName(1)">
+                        <i class="bi bi-check-lg"></i>
+                    </button>
+                </div>
+                ${window.team2.map(name => `<div class="mb-2">${name}</div>`).join('')}
+            </div>
+        </div>
+        <button class="btn btn-success mt-3" onclick="simulateMatch()">
+            Simular Partido
+        </button>`;
+    outputDiv.style.display = "block";
+}
+
+
+function simulateMatch() {
+    // Obtener los equipos
+    const team1 = window.team1.map(name => name.replace(' (C)', ''));
+    const team2 = window.team2.map(name => name.replace(' (C)', ''));
+
+    // Generar resultado aleatorio
+    const team1Goals = Math.floor(Math.random() * 4) + 1; // 1-4 goles
+    const team2Goals = Math.floor(Math.random() * 4) + 1; // 1-4 goles
+
+    // Generar goleadores
+    let team1Scorers = {};
+    let team2Scorers = {};
+
+    // Distribuir goles equipo 1
+    for (let i = 0; i < team1Goals; i++) {
+        const scorer = team1[Math.floor(Math.random() * team1.length)];
+        team1Scorers[scorer] = (team1Scorers[scorer] || 0) + 1;
+    }
+
+    // Distribuir goles equipo 2
+    for (let i = 0; i < team2Goals; i++) {
+        const scorer = team2[Math.floor(Math.random() * team2.length)];
+        team2Scorers[scorer] = (team2Scorers[scorer] || 0) + 1;
+    }
+
+    // Crear resumen de goleadores
+    function formatScorers(scorers) {
+        return Object.entries(scorers)
+            .map(([name, goals]) => `${name}${goals > 1 ? ` x${goals}` : ''}`)
+            .join(', ');
+    }
+
+    // Crear HTML para la simulación
+    let simulationHTML = `
+        <div class="match-simulation mt-4 p-4 border rounded">
+            <h3 class="text-center mb-4">Resultado Final</h3>
+            <div class="score-display text-center mb-4">
+                <strong>${window.team1Name} ${team1Goals} - ${team2Goals} ${window.team2Name}</strong>
+            </div>
+            <div class="goals-summary">
+                <p><strong>Goles ${window.team1Name}:</strong> ${formatScorers(team1Scorers)}</p>
+                <p><strong>Goles ${window.team2Name}:</strong> ${formatScorers(team2Scorers)}</p>
+            </div>
+            ${generateMatchSummary(team1Goals, team2Goals)}
+            <button class="btn btn-info mt-3" onclick="showStatistics(${team1Goals}, ${team2Goals})">
+                Ver Estadísticas
+            </button>
+        </div>`;
+
+    // Agregar la simulación al DOM
+    let matchSimulationDiv = document.createElement('div');
+    matchSimulationDiv.innerHTML = simulationHTML;
+    document.getElementById('output').appendChild(matchSimulationDiv);
+
+    // Scroll hasta la simulación
+    matchSimulationDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+function showStatistics(team1Goals, team2Goals) {
+    // Generar estadísticas aleatorias
+    const team1Possession = Math.floor(Math.random() * 51) + 50; // 50-100%
+    const team2Possession = 100 - team1Possession;
+    const team1Shots = Math.floor(Math.random() * 10) + 5; // 5-15 tiros
+    const team2Shots = Math.floor(Math.random() * 10) + 5; // 5-15 tiros
+    const team1Passes = Math.floor(Math.random() * 200) + 300; // 300-500 pases
+    const team2Passes = Math.floor(Math.random() * 200) + 300; // 300-500 pases
+    const team1YellowCards = Math.floor(Math.random() * 3); // 0-2 amarillas
+    const team2YellowCards = Math.floor(Math.random() * 3); // 0-2 amarillas
+    const team1RedCards = Math.floor(Math.random() * 2); // 0-1 expulsiones
+    const team2RedCards = Math.floor(Math.random() * 2); // 0-1 expulsiones
+
+    // Crear HTML para las estadísticas
+    let statisticsHTML = `
+        <div class="match-statistics mt-4 p-4 border rounded">
+            <h3 class="text-center mb-4">Estadísticas del Partido</h3>
+            <div class="statistics-summary">
+                <p><strong>Posesión:</strong> ${window.team1Name} ${team1Possession}% - ${team2Possession}% ${window.team2Name}</p>
+                <p><strong>Tiros al arco:</strong> ${window.team1Name} ${team1Shots} - ${team2Shots} ${window.team2Name}</p>
+                <p><strong>Total de pases:</strong> ${window.team1Name} ${team1Passes} - ${team2Passes} ${window.team2Name}</p>
+                <p><strong>Tarjetas amarillas:</strong> ${window.team1Name} ${team1YellowCards} - ${team2YellowCards} ${window.team2Name}</p>
+                <p><strong>Tarjetas rojas:</strong> ${window.team1Name} ${team1RedCards} - ${team2RedCards} ${window.team2Name}</p>
+            </div>
+        </div>`;
+
+    // Agregar las estadísticas al DOM
+    let statisticsDiv = document.createElement('div');
+    statisticsDiv.innerHTML = statisticsHTML;
+    document.getElementById('output').appendChild(statisticsDiv);
+
+    // Scroll hasta las estadísticas
+    statisticsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+    function saveTeamName(teamIndex) {
+    const input = document.getElementById(`team-name-${teamIndex}`);
+    const newName = input.value.trim();
+
+    if (newName === '') {
+        Swal.fire({
+            title: "Error",
+            text: "El nombre del equipo no puede estar vacío",
+            icon: "error",
+            confirmButtonColor: '#4f46e5'
+        });
+        input.value = `Equipo ${teamIndex === 0 ? 'Local' : 'Visitante'}`;
+        return;
+    }
+
+    Swal.fire({
+        title: "¡Guardado!",
+        text: `El equipo ha sido renombrado a "${newName}"`,
+        icon: "success",
+        confirmButtonColor: '#4f46e5',
+        timer: 1500,
+        showConfirmButton: false
+    });
+
+    // Actualizar el nombre del equipo en el array de equipos
+    if (teamIndex === 0) {
+        window.team1Name = newName;
+    } else {
+        window.team2Name = newName;
+    }
+}
+
+    function generateMatchSummary(team1Goals, team2Goals) {
+        let summary = '<div class="match-summary mt-3">';
+        
+        if (team1Goals > team2Goals) {
+            summary += '<p class="text-success">¡Victoria para el Equipo Local! 🏆</p>';
+        } else if (team2Goals > team1Goals) {
+            summary += '<p class="text-success">¡Victoria para el Equipo Visitante! 🏆</p>';
+        } else {
+            summary += '<p class="text-warning">¡El partido terminó en empate! 🤝</p>';
+        }
+
+        const totalGoals = team1Goals + team2Goals;
+        if (totalGoals > 5) {
+            summary += '<p>¡Partido con lluvia de goles! ⚽🔥</p>';
+        }
+
+        return summary + '</div>';
+    }
+
+        function copyResults() {
+            let outputDiv = document.getElementById("output");
+            if (outputDiv.innerHTML.trim() === "") {
+                Swal.fire("Error", "No hay resultados para copiar.", "error");
+                return;
+            }
+            let text = outputDiv.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                Swal.fire("Copiado", "Los resultados han sido copiados al portapapeles.", "success");
+            }).catch(err => {
+                Swal.fire("Error", "No se pudo copiar al portapapeles.", "error");
+            });
+        }
+
+        function generateTournament() {
+            let tournamentDiv = document.getElementById("tournament");
+            tournamentDiv.innerHTML = "";
+            tournamentDiv.style.display = "block";
+
+            if (groups.length < 2) {
+                Swal.fire("Error", "Debe haber al menos 2 grupos para generar un torneo.", "error");
+                return;
+            }
+
+            currentRound = 1;
+            matches = [];
+
+            for (let i = 0; i < groups.length; i += 2) {
+                const group1Name = document.getElementById(`group-name-${i}`).value;
+                if (i + 1 < groups.length) {
+                    const group2Name = document.getElementById(`group-name-${i + 1}`).value;
+                    matches.push(`${group1Name} vs ${group2Name}`);
+                } else {
+                    matches.push(`${group1Name} pasa automáticamente`);
+                }
+            }
+
+            renderBracket();
+        }
+
+        function renderBracket() {
+            let tournamentDiv = document.getElementById("tournament");
+            tournamentDiv.innerHTML = "";
+
+            let roundDiv = document.createElement("div");
+            roundDiv.className = "round";
+            roundDiv.innerHTML = `<h4>Ronda ${currentRound}</h4>`;
+
+            matches.forEach((match, index) => {
+                let matchDiv = document.createElement("div");
+                matchDiv.className = "match";
+                matchDiv.innerHTML = `
+                    <p>${match}</p>
+                    <input type="text" class="form-control mb-2" placeholder="Ganador" id="winner-${index}">
+                `;
+                roundDiv.appendChild(matchDiv);
+            });
+
+            let nextRoundBtn = document.createElement("button");
+            nextRoundBtn.className = "btn btn-primary";
+            nextRoundBtn.innerText = "Siguiente Ronda";
+            nextRoundBtn.onclick = nextRound;
+
+            tournamentDiv.appendChild(roundDiv);
+            tournamentDiv.appendChild(nextRoundBtn);
+        }
+
+        function nextRound() {
+            let winners = [];
+            matches.forEach((match, index) => {
+                let winner = document.getElementById(`winner-${index}`).value.trim();
+                if (winner) {
+                    winners.push(winner);
+                }
+            });
+
+            if (winners.length < matches.length) {
+                Swal.fire("Error", "Debes ingresar todos los ganadores antes de continuar.", "error");
+                return;
+            }
+
+            if (winners.length === 1) {
+                Swal.fire({
+                    title: "¡Felicitaciones!",
+                    text: `El ganador del torneo es ${winners[0]}`,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                    onClose: () => {
+                        // Mostrar fuegos artificiales
+                        const fireworks = document.createElement("div");
+                        fireworks.innerHTML = `
+                            <div class="pyro">
+                                <div class="before"></div>
+                                <div class="after"></div>
+                            </div>
+                        `;
+                        document.body.appendChild(fireworks);
+                    }
+                });
+                return;
+            }
+
+            currentRound++;
+            matches = [];
+            for (let i = 0; i < winners.length; i += 2) {
+                if (i + 1 < winners.length) {
+                    matches.push(`${winners[i]} vs ${winners[i + 1]}`);
+                } else {
+                    matches.push(`${winners[i]} pasa automáticamente`);
+                }
+            }
+
+            renderBracket();
+        }
+
+        function openFeedbackModal() {
+            const feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+            feedbackModal.show();
+        }
+        emailjs.init("Hg8IIIbhx3Y9W-g7IDW_4");
+        function sendFeedback() {
+            const feedbackText = document.getElementById('feedbackText').value.trim();
+            
+            if (feedbackText === "") {
+                Swal.fire({
+                    title: "Error",
+                    text: "Por favor, escribe tu opinión antes de enviar.",
+                    icon: "error",
+                    confirmButtonColor: '#4f46e5'
+                });
+                return;
+            }
+
+            // Parámetros para el envío de email
+            const templateParams = {
+                message: feedbackText,
+                to_email: "rousseaug078@gmail.com",
+                from_name: "Usuario de Team Generator",
+                reply_to: "noreply@teamgenerator.com"
+            };
+
+            // Envío del email usando EmailJS
+            emailjs.send(
+                "service_8jeqfos", // Tu Service ID
+                "template_2xzzjal", // Tu Template ID
+                templateParams
+            ).then(
+                function(response) {
+                    Swal.fire({
+                        title: "¡Enviado!",
+                        text: "Tu opinión ha sido enviada exitosamente. ¡Gracias por tu feedback!",
+                        icon: "success",
+                        confirmButtonColor: '#4f46e5'
+                    });
+                    document.getElementById('feedbackText').value = "";
+                    const feedbackModal = bootstrap.Modal.getInstance(document.getElementById('feedbackModal'));
+                    feedbackModal.hide();
+                },
+                function(error) {
+                    console.error("Error:", error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un problema al enviar tu opinión. Por favor, intenta nuevamente.",
+                        icon: "error",
+                        confirmButtonColor: '#4f46e5'
+                    });
+                }
+            );
+        }
+
+        document.getElementById("names").addEventListener("input", function() {
+            let names = this.value.split("\n").map(name => name.trim()).filter(name => name !== "");
+            document.getElementById("playerCount").innerText = `Cantidad de personas anotadas: ${names.length}`;
+        });
+        function saveGroupName(groupIndex) {
+            const input = document.getElementById(`group-name-${groupIndex}`);
+            const newName = input.value.trim();
+            
+            if (newName === '') {
+                Swal.fire({
+                    title: "Error",
+                    text: "El nombre del grupo no puede estar vacío",
+                    icon: "error",
+                    confirmButtonColor: '#4f46e5'
+                });
+                input.value = `Grupo ${groupIndex + 1}`;
+                return;
+            }
+
+            Swal.fire({
+                title: "¡Guardado!",
+                text: `El grupo ha sido renombrado a "${newName}"`,
+                icon: "success",
+                confirmButtonColor: '#4f46e5',
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+            // Actualizar el nombre del grupo en el array de grupos
+            groups[groupIndex].groupName = newName;
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <style>
+        .pyro {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            z-index: 9999;
+        }
+        .pyro > .before, .pyro > .after {
+            position: absolute;
+            content: '';
+            display: block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff0000, rgba(255,0,0,0) 70%);
+            animation: fireworks 1s ease-out infinite;
+        }
+        .pyro > .after {
+            animation-delay: 0.5s;
+        }
+        @keyframes fireworks {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
